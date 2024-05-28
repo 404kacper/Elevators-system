@@ -1,12 +1,12 @@
 import React from 'react';
 
-import Simulation from './SimulationComponent';
+import SimulationComponent from './SimulationComponent';
 
 const HomePage = () => {
   return (
     <>
       <div className='wrapper'>
-        <Simulation />
+        <SimulationComponent />
       </div>
     </>
   );

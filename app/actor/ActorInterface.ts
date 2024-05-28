@@ -3,5 +3,6 @@ export interface ActorInterface {
   y: number;
   targetElevator: number;
   inElevator: boolean;
+  startingFloor: number;
   destinationFloor: number;
 }

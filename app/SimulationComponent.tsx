@@ -8,7 +8,7 @@ import {
   SHAFT_WIDTH,
   SHAFT_HEIGHT,
   SHAFT_TOP,
-  SHAFT_SPACING,
+  X_SHAFT_SPACING,
   FLOOR_Y_POSITIONS,
   ACTOR_WIDTH,
   ACTOR_HEIGHT,
@@ -36,7 +36,7 @@ const SimulationComponent = () => {
       context.beginPath();
       context.moveTo(SHAFT_X_OFFSET, y);
       context.lineTo(
-        SHAFT_X_OFFSET + ELEVATOR_COUNT * (SHAFT_WIDTH + SHAFT_SPACING),
+        SHAFT_X_OFFSET + ELEVATOR_COUNT * (SHAFT_WIDTH + X_SHAFT_SPACING),
         y
       );
       context.stroke();
@@ -44,7 +44,7 @@ const SimulationComponent = () => {
 
     // Draw each elevator shaft first (in a lighter color for contrast)
     simulation.elevators.forEach((elevator, index) => {
-      const shaftX = SHAFT_X_OFFSET + index * (SHAFT_WIDTH + SHAFT_SPACING);
+      const shaftX = SHAFT_X_OFFSET + index * (SHAFT_WIDTH + X_SHAFT_SPACING);
 
       context.fillStyle = '#ddd';
       context.fillRect(shaftX, SHAFT_TOP, SHAFT_WIDTH, SHAFT_HEIGHT);
@@ -52,7 +52,7 @@ const SimulationComponent = () => {
 
     // Draw each elevator car and its cables
     simulation.elevators.forEach((elevator, index) => {
-      const shaftX = SHAFT_X_OFFSET + index * (SHAFT_WIDTH + SHAFT_SPACING);
+      const shaftX = SHAFT_X_OFFSET + index * (SHAFT_WIDTH + X_SHAFT_SPACING);
 
       // Drawing the elevator cables
       context.strokeStyle = '#000';
@@ -70,7 +70,7 @@ const SimulationComponent = () => {
     // Draw each actor
     simulation.actors.forEach((actor) => {
       context.fillStyle = '#f00';
-      context.fillRect(actor.x, actor.y, ACTOR_WIDTH, ACTOR_HEIGHT); // Actor
+      context.fillRect(actor.x, actor.y, ACTOR_WIDTH, ACTOR_HEIGHT);
     });
   };
 
@@ -94,6 +94,14 @@ const SimulationComponent = () => {
   };
 
   useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const context = canvas.getContext('2d');
+      if (context) {
+        // Draw the initial frame
+        draw(context);
+      }
+    }
     requestRef.current = requestAnimationFrame(animate);
     return () => {
       if (requestRef.current) {
