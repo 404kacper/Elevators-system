@@ -8,5 +8,6 @@ export interface ActorInterface {
   startingFloor: number;
   destinationFloor: number;
   tripFinished: boolean;
+  tripDirection: number;
   moveActor(): void;
 }

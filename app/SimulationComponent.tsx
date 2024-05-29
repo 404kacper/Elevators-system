@@ -56,7 +56,7 @@ const SimulationComponent = () => {
       // + 20 to center the actor inside elevator car
       context.fillRect(
         actor.x + ACTOR_WIDTH + 20,
-        actor.y,
+        actor.y - 10,
         ACTOR_WIDTH,
         ACTOR_HEIGHT
       );
