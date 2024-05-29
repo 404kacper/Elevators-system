@@ -6,8 +6,8 @@ export class Actor implements ActorInterface {
   y: number;
   targetElevator: number;
   inElevator: boolean;
-  destinationFloor: number;
   startingFloor: number;
+  destinationFloor: number;
 
   constructor(
     x: number,
@@ -24,5 +24,9 @@ export class Actor implements ActorInterface {
     do {
       this.destinationFloor = Math.floor(Math.random() * FLOOR_COUNT);
     } while (this.destinationFloor === this.startingFloor);
+  }
+
+  moveActor(): void {
+      
   }
 }

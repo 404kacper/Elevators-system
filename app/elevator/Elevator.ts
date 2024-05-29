@@ -1,11 +1,17 @@
-import { ElevatorInterface } from "./ElevatorInterface";
+import { ElevatorInterface } from './ElevatorInterface';
 
 export class Elevator implements ElevatorInterface {
-  carY: number;
+  x: number;
+  y: number;
   direction: number;
 
-  constructor(carY: number, direction: number) {
-    this.carY = carY;
+  constructor(x: number, y: number, direction: number) {
+    this.x = x;
+    this.y = y;
     this.direction = direction;
+  }
+
+  moveElevator(): void {
+      
   }
 }

@@ -1,22 +1,13 @@
 'use client';
 
-import {
-  ELEVATOR_COUNT,
-  CAR_WIDTH,
-  CAR_HEIGHT,
-  SHAFT_X_OFFSET,
-  SHAFT_WIDTH,
-  SHAFT_HEIGHT,
-  SHAFT_TOP,
-  X_SHAFT_SPACING,
-  FLOOR_Y_POSITIONS,
-  ACTOR_WIDTH,
-  ACTOR_HEIGHT,
-  SLOW_DOWN_FACTOR,
-} from './SimulationConstants';
-
 import { useEffect, useRef, useState } from 'react';
 import { Simulation } from './Simulation';
+import {
+  FLOOR_HEIGHT,
+  SHAFT_HEIGHT,
+  SHAFT_WIDTH,
+  SLOW_DOWN_FACTOR,
+} from './SimulationConstants';
 
 const SimulationComponent = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -30,48 +21,28 @@ const SimulationComponent = () => {
     context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 
     // Draw each floor
-    FLOOR_Y_POSITIONS.forEach((y) => {
+    for (let i: number = 1; i < SHAFT_HEIGHT / FLOOR_HEIGHT + 1; i++) {
       context.strokeStyle = '#000';
       context.lineWidth = 1;
       context.beginPath();
-      context.moveTo(SHAFT_X_OFFSET, y);
-      context.lineTo(
-        SHAFT_X_OFFSET + ELEVATOR_COUNT * (SHAFT_WIDTH + X_SHAFT_SPACING),
-        y
-      );
+      context.moveTo(0, FLOOR_HEIGHT * i);
+      context.lineTo(1200, FLOOR_HEIGHT * i);
       context.stroke();
-    });
+    }
+
+    context.fillRect(0,0, 10, 10);
 
     // Draw each elevator shaft first (in a lighter color for contrast)
-    simulation.elevators.forEach((elevator, index) => {
-      const shaftX = SHAFT_X_OFFSET + index * (SHAFT_WIDTH + X_SHAFT_SPACING);
-
-      context.fillStyle = '#ddd';
-      context.fillRect(shaftX, SHAFT_TOP, SHAFT_WIDTH, SHAFT_HEIGHT);
-    });
+    context.fillStyle = '#ddd';
 
     // Draw each elevator car and its cables
-    simulation.elevators.forEach((elevator, index) => {
-      const shaftX = SHAFT_X_OFFSET + index * (SHAFT_WIDTH + X_SHAFT_SPACING);
+    context.strokeStyle = '#000';
 
-      // Drawing the elevator cables
-      context.strokeStyle = '#000';
-      context.lineWidth = 2;
-      context.beginPath();
-      context.moveTo(shaftX + 5 + CAR_WIDTH / 2, SHAFT_TOP);
-      context.lineTo(shaftX + 5 + CAR_WIDTH / 2, elevator.carY);
-      context.stroke();
+    // Drawing the elevator cables
 
-      // Drawing the elevator car
-      context.fillStyle = '#aaa';
-      context.fillRect(shaftX + 5, elevator.carY, CAR_WIDTH, CAR_HEIGHT);
-    });
+    // Drawing the elevator car
 
     // Draw each actor
-    simulation.actors.forEach((actor) => {
-      context.fillStyle = '#f00';
-      context.fillRect(actor.x, actor.y, ACTOR_WIDTH, ACTOR_HEIGHT);
-    });
   };
 
   const animate = () => {
@@ -79,8 +50,7 @@ const SimulationComponent = () => {
     if (frameCount.current % SLOW_DOWN_FACTOR === 0) {
       setIteration((prev) => prev + 1);
 
-      simulation.updateElevators();
-      simulation.updateActors();
+      simulation.runSimulationStep();
 
       const canvas = canvasRef.current;
       if (canvas) {

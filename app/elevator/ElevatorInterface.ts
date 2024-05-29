@@ -1,4 +1,6 @@
 export interface ElevatorInterface {
-    carY: number;
-    direction: number;
-  }
+  x: number;
+  y: number;
+  direction: number;
+  moveElevator(): void;
+}

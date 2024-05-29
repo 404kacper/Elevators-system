@@ -5,4 +5,5 @@ export interface ActorInterface {
   inElevator: boolean;
   startingFloor: number;
   destinationFloor: number;
+  moveActor(): void;
 }
