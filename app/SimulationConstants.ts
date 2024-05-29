@@ -1,7 +1,10 @@
 export const SLOW_DOWN_FACTOR = 100;
 export const FLOOR_COUNT = 5;
-export const CAR_HEIGHT = 40;
-// 20 is the top and bottom padding alltogether
-export const SHAFT_HEIGHT = (CAR_HEIGHT + 20) * FLOOR_COUNT;
-export const SHAFT_WIDTH = 60;
+export const CAR_HEIGHT = 50;
+export const CAR_WIDTH = 50;
+export const ACTOR_WIDTH = 10;
+export const ACTOR_HEIGHT = 10;
+export const SHAFT_HEIGHT = CAR_HEIGHT * FLOOR_COUNT;
+export const SHAFT_WIDTH = 70;
 export const FLOOR_HEIGHT = SHAFT_HEIGHT / FLOOR_COUNT;
+export const ACTOR_X_MOVE_OFFSET = 50;

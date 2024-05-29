@@ -1,9 +1,12 @@
+import { ElevatorCarInterface } from '../elevator/ElevatorCarInterface';
+
 export interface ActorInterface {
   x: number;
   y: number;
-  targetElevator: number;
+  targetElevator: ElevatorCarInterface;
   inElevator: boolean;
   startingFloor: number;
   destinationFloor: number;
+  tripFinished: boolean;
   moveActor(): void;
 }

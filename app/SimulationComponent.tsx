@@ -3,10 +3,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { Simulation } from './Simulation';
 import {
+  CAR_HEIGHT,
+  CAR_WIDTH,
   FLOOR_HEIGHT,
   SHAFT_HEIGHT,
   SHAFT_WIDTH,
   SLOW_DOWN_FACTOR,
+  ACTOR_WIDTH,
+  ACTOR_HEIGHT,
 } from './SimulationConstants';
 
 const SimulationComponent = () => {
@@ -30,19 +34,33 @@ const SimulationComponent = () => {
       context.stroke();
     }
 
-    context.fillRect(0,0, 10, 10);
-
-    // Draw each elevator shaft first (in a lighter color for contrast)
+    // Draw each elevator shaft
     context.fillStyle = '#ddd';
+    context.fillRect(0, 0, SHAFT_WIDTH, SHAFT_HEIGHT);
 
-    // Draw each elevator car and its cables
-    context.strokeStyle = '#000';
-
-    // Drawing the elevator cables
-
-    // Drawing the elevator car
+    // Draw each elevator car
+    context.fillStyle = '#000';
+    simulation.elevators.forEach((elevatorCar) => {
+      // + 10 to center the car inside elevator
+      context.fillRect(
+        elevatorCar.x + 10,
+        elevatorCar.y,
+        CAR_WIDTH,
+        CAR_HEIGHT
+      );
+    });
 
     // Draw each actor
+    context.fillStyle = '#FF0000';
+    simulation.actors.forEach((actor) => {
+      // + 20 to center the actor inside elevator car
+      context.fillRect(
+        actor.x + ACTOR_WIDTH + 20,
+        actor.y,
+        ACTOR_WIDTH,
+        ACTOR_HEIGHT
+      );
+    });
   };
 
   const animate = () => {

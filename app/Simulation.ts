@@ -1,29 +1,39 @@
 // Simulation.ts
-import {} from './SimulationConstants';
+import {
+  ACTOR_HEIGHT,
+  ACTOR_X_MOVE_OFFSET,
+  FLOOR_HEIGHT,
+} from './SimulationConstants';
 
-import { ElevatorInterface } from './elevator/ElevatorInterface';
+import { ElevatorCarInterface } from './elevator/ElevatorCarInterface';
 import { SimulationInterface } from './SimulationInterface';
 import { ActorInterface } from './actor/ActorInterface';
-import { Elevator } from './elevator/Elevator';
+import { ElevatorCar } from './elevator/ElevatorCar';
 import { Actor } from './actor/Actor';
 
 export class Simulation implements SimulationInterface {
-  public elevators: ElevatorInterface[];
+  public elevators: ElevatorCarInterface[];
   public actors: ActorInterface[];
 
   constructor() {
-    this.elevators = Array.from({ length: 1 }, () => new Elevator(0, 0, 1));
+    this.elevators = Array.from({ length: 1 }, () => new ElevatorCar(0, 0, 1));
     this.actors = Array.from({ length: 1 }, (_, i) => {
-      return new Actor(1, 1, 0, false);
+      return new Actor(
+        ACTOR_X_MOVE_OFFSET,
+        FLOOR_HEIGHT - ACTOR_HEIGHT,
+        this.elevators[0],
+        false
+      );
     });
   }
 
   runSimulationStep(): void {
-    this.elevators.forEach((elevator) => {
-      elevator.moveElevator();
-    });
+    // move actor first so that he's able to get inside the elevator on 0th iteration
     this.actors.forEach((actor) => {
       actor.moveActor();
+    });
+    this.elevators.forEach((elevator) => {
+      elevator.moveElevatorCar();
     });
   }
 }

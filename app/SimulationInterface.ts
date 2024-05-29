@@ -1,4 +1,4 @@
-import { ElevatorInterface } from './elevator/ElevatorInterface';
+import { ElevatorInterface } from './elevator/ElevatorCarInterface';
 import { ActorInterface } from './actor/ActorInterface';
 
 export interface SimulationInterface {
