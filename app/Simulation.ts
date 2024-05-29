@@ -1,47 +1,43 @@
 // Simulation.ts
-import { ACTOR_X_MOVE_OFFSET, FLOOR_HEIGHT } from './SimulationConstants';
 
-import { ElevatorCarInterface } from './elevator/ElevatorCarInterface';
 import { SimulationInterface } from './SimulationInterface';
 import { ActorInterface } from './actor/ActorInterface';
-import { ElevatorCar } from './elevator/ElevatorCar';
-import { Actor } from './actor/Actor';
+import { ElevatorCarInterface } from './elevator/ElevatorCarInterface';
+import { ElevatorSystem } from './system/ElevatorSystem';
+import { ElevatorSystemInterface } from './system/ElevatorSystemInterface';
 
 export class Simulation implements SimulationInterface {
-  public elevators: ElevatorCarInterface[];
-  public actors: ActorInterface[];
+  elevatorSystem: ElevatorSystemInterface;
 
   constructor() {
-    this.elevators = Array.from(
-      { length: 1 },
-      () => new ElevatorCar(0, 0, 1, false)
-    );
-
-    this.actors = Array.from({ length: 1 }, (_, i) => {
-      let startingFloor = 4;
-      // Generate a random destination floor that's always different from starting floor
-      // do {
-      //   this.destinationFloor = Math.floor(Math.random() * FLOOR_COUNT);
-      // } while (this.destinationFloor === this.startingFloor);
-      let destinationFloor = 0;
-      return new Actor(
-        ACTOR_X_MOVE_OFFSET,
-        FLOOR_HEIGHT + startingFloor * FLOOR_HEIGHT,
-        this.elevators[0],
-        startingFloor,
-        destinationFloor,
-        false
-      );
-    });
+    this.elevatorSystem = new ElevatorSystem();
   }
 
   runSimulationStep(): void {
-    // move actor first so that he's able to get inside the elevator on 0th iteration
-    this.actors.forEach((actor) => {
-      actor.moveActor();
-    });
-    this.elevators.forEach((elevator) => {
-      elevator.pickup(this.actors[0]);
-    });
+    let selectedElevator: ElevatorCarInterface =
+      this.elevatorSystem.selectElevator();
+    let selectedActor: ActorInterface | null =
+      this.elevatorSystem.selectActor();
+
+    if (selectedActor === null) {
+      // Stop the simulation or handle as needed
+      return;
+    }
+
+    let currentTripStatus: boolean = selectedActor.tripFinished;
+
+    selectedActor.moveActor();
+    selectedElevator.pickup(selectedActor);
+
+    // Call elevator only if there are more actors to transport
+    if (
+      currentTripStatus !== selectedActor.tripFinished &&
+      selectedActor.tripFinished
+    ) {
+      let nextActor = this.elevatorSystem.selectActor();
+      if (nextActor !== null) {
+        selectedElevator.callElevator();
+      }
+    }
   }
 }

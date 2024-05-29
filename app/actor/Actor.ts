@@ -55,8 +55,6 @@ export class Actor implements ActorInterface {
       this.x += ACTOR_X_MOVE_OFFSET;
     } else if (
       // edge condition for exiting on the floor with the highest number
-      // elevator direction has already changed but actor has moved an iteration before the elevator (the 1 iteration lag)
-      // extra target direction check added so that the bottom edge case has chance to trigger
       // that is when moving down
       this.y >= SHAFT_HEIGHT - FLOOR_HEIGHT &&
       !this.tripFinished &&

@@ -9,4 +9,5 @@ export interface ElevatorCarInterface {
   moveElevatorCar(): void;
   pickup(actor: ActorInterface): void;
   deliver(actor: ActorInterface): void;
+  callElevator(): void;
 }

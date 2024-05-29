@@ -67,11 +67,15 @@ export class ElevatorCar implements ElevatorCarInterface {
     if (elevatorFloor == actor.destinationFloor) {
       this.isPicked = false;
       this.isMoving = false;
-      // actor = undefined;
     }
 
     if (this.isPicked == true) {
       this.moveElevatorCar();
     }
+  }
+
+  callElevator() {
+    // assumes that pickup already has a new actor that's calling the elevator to start moving again
+    this.isMoving = true;
   }
 }
