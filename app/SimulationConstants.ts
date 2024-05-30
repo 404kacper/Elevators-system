@@ -1,5 +1,4 @@
 export const FLOOR_COUNT = 5;
-export const ELEVATORS_COUNT = 3;
 
 export const SLOW_DOWN_FACTOR = 100;
 export const CAR_HEIGHT = 50;

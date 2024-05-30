@@ -24,8 +24,10 @@ export class ElevatorCar implements ElevatorCarInterface {
 
       // - FLOOR_HEIGHT for last bounce
       if (this.y >= SHAFT_HEIGHT - FLOOR_HEIGHT) {
+        this.y = SHAFT_HEIGHT - FLOOR_HEIGHT;
         this.direction = -this.direction;
       } else if (this.y <= 0) {
+        this.y = 0;
         this.direction = -this.direction;
       }
     }

@@ -1,7 +1,4 @@
 import {
-  ACTOR_X_MOVE_OFFSET,
-  ELEVATORS_COUNT,
-  FLOOR_HEIGHT,
   SHAFT_X_OFFSET,
 } from '../SimulationConstants';
 
@@ -9,49 +6,18 @@ import { ActorInterface } from '../actor/ActorInterface';
 import { ElevatorCarInterface } from '../elevator/ElevatorCarInterface';
 import { ElevatorSystemInterface } from './ElevatorSystemInterface';
 import { ElevatorCar } from '../elevator/ElevatorCar';
-import { Actor } from '../actor/Actor';
 
 export class ElevatorSystem implements ElevatorSystemInterface {
   public elevators: ElevatorCarInterface[];
   public actors: ActorInterface[];
 
-  constructor() {
+  constructor(actors: ActorInterface[], elevatorsCount: number) {
     this.elevators = Array.from(
-      { length: ELEVATORS_COUNT },
+      { length: elevatorsCount },
       (_, i) => new ElevatorCar(SHAFT_X_OFFSET * i, 0, 1, false)
     );
-    let startingFloor = 0;
-    let destinationFloor = 3;
-    this.actors = [
-      new Actor(
-        ACTOR_X_MOVE_OFFSET,
-        FLOOR_HEIGHT + startingFloor * FLOOR_HEIGHT,
-        startingFloor,
-        destinationFloor,
-        false
-      ),
-      new Actor(
-        ACTOR_X_MOVE_OFFSET,
-        FLOOR_HEIGHT + startingFloor * FLOOR_HEIGHT,
-        startingFloor,
-        destinationFloor + 1,
-        false
-      ),
-      new Actor(
-        ACTOR_X_MOVE_OFFSET,
-        FLOOR_HEIGHT + destinationFloor * FLOOR_HEIGHT,
-        destinationFloor,
-        startingFloor,
-        false
-      ),
-      new Actor(
-        ACTOR_X_MOVE_OFFSET,
-        FLOOR_HEIGHT + destinationFloor * FLOOR_HEIGHT,
-        destinationFloor,
-        startingFloor + 1,
-        false
-      ),
-    ];
+    this.actors = actors;
+    console.log(this.actors);
   }
 
   findFreeElevator(): ElevatorCarInterface | null {
@@ -61,7 +27,7 @@ export class ElevatorSystem implements ElevatorSystemInterface {
         return elevator;
       }
     }
-     return null;
+    return null;
   }
 
   selectActor(): ActorInterface | null {
@@ -71,6 +37,6 @@ export class ElevatorSystem implements ElevatorSystemInterface {
         return actor;
       }
     }
-     return null;
+    return null;
   }
 }

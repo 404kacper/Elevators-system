@@ -85,9 +85,7 @@ export class Actor implements ActorInterface {
         this.y += FLOOR_HEIGHT * this.tripDirection;
       }
 
-      console.log(this.tripDirection);
-
-      // move elevator within the same iteration if it's going 
+      // move elevator within the same iteration if it's going
       if (this.inElevator && this.tripDirection > 0) {
         this.x = this.targetElevator.x;
         this.y += FLOOR_HEIGHT * this.tripDirection;
