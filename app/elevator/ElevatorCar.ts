@@ -15,7 +15,7 @@ export class ElevatorCar implements ElevatorCarInterface {
     this.y = y;
     this.direction = direction;
     this.isPicked = isPicked;
-    this.isMoving = true;
+    this.isMoving = false;
   }
 
   moveElevatorCar(): void {
@@ -33,6 +33,7 @@ export class ElevatorCar implements ElevatorCarInterface {
 
   pickup(actor: ActorInterface) {
     let elevatorFloor = Math.floor(this.y / FLOOR_HEIGHT);
+    actor.targetElevator = this;
 
     if (this.isPicked == true) {
       this.deliver(actor);

@@ -1,4 +1,9 @@
-import { ACTOR_X_MOVE_OFFSET, FLOOR_HEIGHT } from '../SimulationConstants';
+import {
+  ACTOR_X_MOVE_OFFSET,
+  ELEVATORS_COUNT,
+  FLOOR_HEIGHT,
+  SHAFT_X_OFFSET,
+} from '../SimulationConstants';
 
 import { ActorInterface } from '../actor/ActorInterface';
 import { ElevatorCarInterface } from '../elevator/ElevatorCarInterface';
@@ -9,22 +14,18 @@ import { Actor } from '../actor/Actor';
 export class ElevatorSystem implements ElevatorSystemInterface {
   public elevators: ElevatorCarInterface[];
   public actors: ActorInterface[];
-  public actorsIterator: number;
 
   constructor() {
-    this.actorsIterator = 0;
     this.elevators = Array.from(
-      { length: 1 },
-      () => new ElevatorCar(0, 0, 1, false)
+      { length: ELEVATORS_COUNT },
+      (_, i) => new ElevatorCar(SHAFT_X_OFFSET * i, 0, 1, false)
     );
-
     let startingFloor = 0;
     let destinationFloor = 3;
     this.actors = [
       new Actor(
         ACTOR_X_MOVE_OFFSET,
         FLOOR_HEIGHT + startingFloor * FLOOR_HEIGHT,
-        this.elevators[0],
         startingFloor,
         destinationFloor,
         false
@@ -32,7 +33,6 @@ export class ElevatorSystem implements ElevatorSystemInterface {
       new Actor(
         ACTOR_X_MOVE_OFFSET,
         FLOOR_HEIGHT + startingFloor * FLOOR_HEIGHT,
-        this.elevators[0],
         startingFloor,
         destinationFloor + 1,
         false
@@ -40,35 +40,37 @@ export class ElevatorSystem implements ElevatorSystemInterface {
       new Actor(
         ACTOR_X_MOVE_OFFSET,
         FLOOR_HEIGHT + destinationFloor * FLOOR_HEIGHT,
-        this.elevators[0],
         destinationFloor,
         startingFloor,
         false
-      )
+      ),
+      new Actor(
+        ACTOR_X_MOVE_OFFSET,
+        FLOOR_HEIGHT + destinationFloor * FLOOR_HEIGHT,
+        destinationFloor,
+        startingFloor + 1,
+        false
+      ),
     ];
   }
 
-  selectElevator(): ElevatorCarInterface {
-    return this.elevators[0];
+  findFreeElevator(): ElevatorCarInterface | null {
+    for (let elevator of this.elevators) {
+      // select an elevator that isn't moving (not making any trips)
+      if (!elevator.isMoving) {
+        return elevator;
+      }
+    }
+     return null;
   }
 
   selectActor(): ActorInterface | null {
-    // Ensure actorsIterator is within bounds
-    if (this.actorsIterator >= this.actors.length) {
-      return null; // All actors have finished their trips
+    for (let actor of this.actors) {
+      // select actor that hasn't done his trip && isn't in elevator
+      if (!actor.tripFinished && !actor.inElevator) {
+        return actor;
+      }
     }
-
-    // Move to next actor if the current actor's trip is finished
-    if (this.actors[this.actorsIterator].tripFinished) {
-      this.actorsIterator++;
-    }
-
-    // Ensure actorsIterator is within bounds again after increment
-    if (this.actorsIterator >= this.actors.length) {
-      return null; // All actors have finished their trips
-    }
-
-    return this.actors[this.actorsIterator];
+     return null;
   }
 }
-

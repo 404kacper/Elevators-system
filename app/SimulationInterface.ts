@@ -1,3 +1,3 @@
 export interface SimulationInterface {
-  runSimulationStep(): void;
+  runSimulationStep(): boolean;
 }

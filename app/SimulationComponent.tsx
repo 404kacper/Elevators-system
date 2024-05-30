@@ -12,6 +12,7 @@ import {
   SLOW_DOWN_FACTOR,
   ACTOR_WIDTH,
   ACTOR_HEIGHT,
+  SHAFT_X_OFFSET,
 } from './SimulationConstants';
 
 const SimulationComponent = () => {
@@ -31,13 +32,15 @@ const SimulationComponent = () => {
       context.lineWidth = 1;
       context.beginPath();
       context.moveTo(0, FLOOR_HEIGHT * i);
-      context.lineTo(1200, FLOOR_HEIGHT * i);
+      context.lineTo(2000, FLOOR_HEIGHT * i);
       context.stroke();
     }
 
     // Draw each elevator shaft
     context.fillStyle = '#ddd';
-    context.fillRect(0, 0, SHAFT_WIDTH, SHAFT_HEIGHT);
+    simulation.elevatorSystem.elevators.forEach((elevatorCar, i) => {
+      context.fillRect(SHAFT_X_OFFSET * i, 0, SHAFT_WIDTH, SHAFT_HEIGHT);
+    });
 
     // Draw each elevator car
     context.fillStyle = '#000';
@@ -63,13 +66,12 @@ const SimulationComponent = () => {
       );
     });
   };
-
   const animate = () => {
     frameCount.current++;
     if (frameCount.current % SLOW_DOWN_FACTOR === 0) {
       setIteration((prev) => prev + 1);
 
-      simulation.runSimulationStep();
+      const simulationCompleted = simulation.runSimulationStep();
 
       const canvas = canvasRef.current;
       if (canvas) {
@@ -77,6 +79,13 @@ const SimulationComponent = () => {
         if (context) {
           draw(context);
         }
+      }
+
+      if (simulationCompleted) {
+        if (requestRef.current) {
+          cancelAnimationFrame(requestRef.current);
+        }
+        return; // Stop the animation loop
       }
     }
     requestRef.current = requestAnimationFrame(animate);
@@ -102,7 +111,7 @@ const SimulationComponent = () => {
   return (
     <>
       <div>Simulation Iteration: {iteration}</div>
-      <canvas ref={canvasRef} width={1200} height={400}></canvas>
+      <canvas ref={canvasRef} width={1800} height={400}></canvas>
     </>
   );
 };

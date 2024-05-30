@@ -4,7 +4,6 @@ import { ElevatorCarInterface } from '../elevator/ElevatorCarInterface';
 export interface ElevatorSystemInterface {
   elevators: ElevatorCarInterface[];
   actors: ActorInterface[];
-  actorsIterator: number;
-  selectElevator(): ElevatorCarInterface;
+  findFreeElevator(): ElevatorCarInterface | null;
   selectActor(): ActorInterface | null;
 }
