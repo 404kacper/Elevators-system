@@ -12,8 +12,7 @@ import {
   ACTOR_WIDTH,
   ACTOR_HEIGHT,
   SHAFT_X_OFFSET,
-  ACTOR_X_MOVE_OFFSET,
-  ELEVATORS_COUNT,
+  ACTOR_X_MOVE_OFFSET
 } from './SimulationConstants';
 import { ActorInterface } from './actor/ActorInterface';
 import { Actor } from './actor/Actor';
@@ -23,7 +22,9 @@ const SimulationComponent = () => {
   const requestRef = useRef<number | null>(null);
   const frameCount = useRef(0);
   const [iteration, setIteration] = useState(0);
-  const [simulation, setSimulation] = useState<Simulation>(() => new Simulation([]));
+  const [simulation, setSimulation] = useState<Simulation>(
+    () => new Simulation([], 0)
+  );
   const [runSimulation, setRunSimulation] = useState(false);
   const [sliderValue, setSliderValue] = useState(1);
   const [actorsInputField, setActorsInputField] = useState('');
@@ -33,7 +34,9 @@ const SimulationComponent = () => {
     setSliderValue(Number(event.target.value));
   };
 
-  const handleActorsInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleActorsInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setActorsInputField(event.target.value);
   };
 
@@ -55,7 +58,7 @@ const SimulationComponent = () => {
     parseActorsInput(actorsInputField).forEach((floorsPair) => {
       let newActor: ActorInterface = new Actor(
         ACTOR_X_MOVE_OFFSET,
-        floorsPair[0]*FLOOR_HEIGHT,
+        floorsPair[0] * FLOOR_HEIGHT,
         floorsPair[0],
         floorsPair[1],
         false
@@ -85,12 +88,22 @@ const SimulationComponent = () => {
 
     context.fillStyle = '#000';
     simulation.elevatorSystem.elevators.forEach((elevatorCar) => {
-      context.fillRect(elevatorCar.x + 10, elevatorCar.y, CAR_WIDTH, CAR_HEIGHT);
+      context.fillRect(
+        elevatorCar.x + 10,
+        elevatorCar.y,
+        CAR_WIDTH,
+        CAR_HEIGHT
+      );
     });
 
     context.fillStyle = '#FF0000';
     simulation.elevatorSystem.actors.forEach((actor) => {
-      context.fillRect(actor.x + ACTOR_WIDTH + 20, actor.y - 10, ACTOR_WIDTH, ACTOR_HEIGHT);
+      context.fillRect(
+        actor.x + ACTOR_WIDTH + 20,
+        actor.y - 10,
+        ACTOR_WIDTH,
+        ACTOR_HEIGHT
+      );
     });
   };
 
@@ -104,7 +117,8 @@ const SimulationComponent = () => {
       const canvas = canvasRef.current;
       if (canvas) {
         const context = canvas.getContext('2d');
-        if (context && runSimulation) { // Only draw if runSimulation is true
+        if (context && runSimulation) {
+          // Only draw if runSimulation is true
           draw(context);
         }
       }
@@ -172,8 +186,12 @@ const SimulationComponent = () => {
               value={actorsInputField}
               required
             />
-            <p id='helper-text-explanation' className='mt-2 text-sm text-gray-500 dark:text-gray-400'>
-              First value within square brackets is the starting floor while second one is the destination floor
+            <p
+              id='helper-text-explanation'
+              className='mt-2 text-sm text-gray-500 dark:text-gray-400'
+            >
+              First value within square brackets is the starting floor while
+              second one is the destination floor
             </p>
           </div>
           <button
